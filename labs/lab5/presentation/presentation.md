@@ -1,210 +1,131 @@
 ---
 ## Front matter
 lang: ru-RU
-title: Структура научной презентации
-subtitle: Простейший шаблон
-author:
-  - Кулябов Д. С.
-institute:
-  - Российский университет дружбы народов, Москва, Россия
-  - Объединённый институт ядерных исследований, Дубна, Россия
-date: 01 января 1970
+title: Презентация по лабораторной работе №5
+author: Коновалова Татьяна Борисовна
+institute: РУДН, Москва, Россия
 
-## i18n babel
-babel-lang: russian
-babel-otherlangs: english
+date: 2 Октября 2023
 
-## Formatting pdf
+## Formatting
 toc: false
-toc-title: Содержание
 slide_level: 2
-aspectratio: 169
-section-titles: true
 theme: metropolis
-header-includes:
+header-includes: 
  - \metroset{progressbar=frametitle,sectionpage=progressbar,numbering=fraction}
  - '\makeatletter'
  - '\beamer@ignorenonframefalse'
  - '\makeatother'
+aspectratio: 43
+section-titles: true
+polyglossia-lang: russian
+polyglossia-otherlangs: english
+mainfont: PT Serif
+romanfont: PT Serif
+sansfont: PT Sans
+monofont: PT Mono
+mainfontoptions: Ligatures=TeX
+romanfontoptions: Ligatures=TeX
+sansfontoptions: Ligatures=TeX,Scale=MatchLowercase
+monofontoptions: Scale=MatchLowercase
+indent: true
+pdf-engine: xelatex
+header-includes:
+  - \linepenalty=10 # the penalty added to the badness of each line within a paragraph (no associated penalty node) Increasing the value makes tex try to have fewer lines in the paragraph.
+  - \interlinepenalty=0 # value of the penalty (node) added after each line of a paragraph.
+  - \hyphenpenalty=50 # the penalty for line breaking at an automatically inserted hyphen
+  - \exhyphenpenalty=50 # the penalty for line breaking at an explicit hyphen
+  - \binoppenalty=700 # the penalty for breaking a line at a binary operator
+  - \relpenalty=500 # the penalty for breaking a line at a relation
+  - \clubpenalty=150 # extra penalty for breaking after first line of a paragraph
+  - \widowpenalty=150 # extra penalty for breaking before last line of a paragraph
+  - \displaywidowpenalty=50 # extra penalty for breaking before last line before a display math
+  - \brokenpenalty=100 # extra penalty for page breaking after a hyphenated line
+  - \predisplaypenalty=10000 # penalty for breaking before a display
+  - \postdisplaypenalty=0 # penalty for breaking after a display
+  - \floatingpenalty = 20000 # penalty for splitting an insertion (can only be split footnote in standard LaTeX)
+  - \raggedbottom # or \flushbottom
+  - \usepackage{float} # keep figures where there are in the text
+  - \floatplacement{figure}{H} # keep figures where there are in the text
 ---
 
-# Информация
+# Презентация по лабораторной работы №5
 
-## Докладчик
+## Цель лабораторной работы №5
 
-:::::::::::::: {.columns align=center}
-::: {.column width="70%"}
+Цель: Изучить механизмы изменения идентификаторов, применения SetUID- и Sticky-битов. Получить практические навыки работы в консоли с дополнительными атрибутами. Рассмотреть работы механизма смены идентификатора процессов пользователей, а также влияние бита Sticky на запись и удаление файлов.
 
-  * Кулябов Дмитрий Сергеевич
-  * д.ф.-м.н., профессор
-  * профессор кафедры прикладной информатики и теории вероятностей
-  * Российский университет дружбы народов
-  * [kulyabov-ds@rudn.ru](mailto:kulyabov-ds@rudn.ru)
-  * <https://yamadharma.github.io/ru/>
+## Задачи лабораторной работы №5
 
-:::
-::: {.column width="30%"}
+- Создать программу, выводящую uid и gid, и посмотреть на вывод после добавления SetUID и SetGID битов.
+- Создать программу для чтения файлов и проверить вывод после добавления SetUID бита.
+- На примере папки /tmp изучить влияние Sticky бита на запись и удаление файлов.
 
-![](./image/kulyabov.jpg)
+# Ход выполнения лабораторной работы
 
-:::
-::::::::::::::
+## Создание файла
 
-# Вводная часть
+Создала программу simpleid.c со следующим текстом 
 
-## Актуальность
+![Текст программы simpleid.c](image/5.png){ #fig:005 width=70% }
 
-- Важно донести результаты своих исследований до окружающих
-- Научная презентация --- рабочий инструмент исследователя
-- Необходимо создавать презентацию быстро
-- Желательна минимизация усилий для создания презентации
+## Работа с созданной программой
 
-## Объект и предмет исследования
+Скомпилировала программу с помощью команды gcc и убедилась, что файл действительно создан. 
+Далее запустила исполняемый файл через ./. 
+Вывод написанной программы совпадает с выводом команды id 
 
-- Презентация как текст
-- Программное обеспечение для создания презентаций
-- Входные и выходные форматы презентаций
+![Компиляция и запуск simpleid](image/6.png){ #fig:006 width=70% }
 
-## Цели и задачи
+## Установка SetUID-бит
 
-- Создать шаблон презентации в Markdown
-- Описать алгоритм создания выходных форматов презентаций
+От имени суперпользователя сменила владельца файла simpleid2 на root и установила SetUID-бит. 
+После этого через команду ls -l убедилась, что бит установился корректно 
 
-## Материалы и методы
+![Смена владельца и установка SetUID](image/10.png){ #fig:010 width=70% }
 
-- Процессор `pandoc` для входного формата Markdown
-- Результирующие форматы
-	- `pdf`
-	- `html`
-- Автоматизация процесса создания: `Makefile`
+## Работа с программой readfile.c
 
-# Создание презентации
+Создала программу readfile.c 
 
-## Процессор `pandoc`
+![Текст программы readfile.c](image/13.png){ #fig:013 width=70% }
 
-- Pandoc: преобразователь текстовых файлов
-- Сайт: <https://pandoc.org/>
-- Репозиторий: <https://github.com/jgm/pandoc>
+## Наличие Sticky-бита
 
-## Формат `pdf`
+Проводим над файлом file01.txt следующие действия: читаем его, дозаписываем и перезаписываем информацию, переименовываем. Эти действия проходят без ошибок. При попытке удаления возникает ошибка.
 
-- Использование LaTeX
-- Пакет для презентации: [beamer](https://ctan.org/pkg/beamer)
-- Тема оформления: `metropolis`
+![Действия над file01.txt от лица guest2](image/20.png){ #fig:020 width=70% }
 
-## Код для формата `pdf`
+## Изменение Sticky-бита
 
-```yaml
-slide_level: 2
-aspectratio: 169
-section-titles: true
-theme: metropolis
-```
+От имени суперпользователя удаляем sticku-бит командой chmod -t.
 
-## Формат `html`
+![Удаление Sticky-бита](image/21.png){ #fig:021 width=70% }
 
-- Используется фреймворк [reveal.js](https://revealjs.com/)
-- Используется [тема](https://revealjs.com/themes/) `beige`
+## Отсутствие Sticky-бита
 
-## Код для формата `html`
+Повторяем описанные ранее действия над файлом file01.txt. Теперь пользователь может удалить не принадлежащий ему файл.
 
-- Тема задаётся в файле `Makefile`
+![Повтор действий](image/22.png){ #fig:022 width=70% }
 
-```make
-REVEALJS_THEME = beige 
-```
-# Результаты
+## Выводы
 
-## Получающиеся форматы
+Изучила механизмы изменения идентификаторов, применения SetUID- и Sticky-битов. Получила практические навыки работы в консоли с дополнительными атрибутами. Рассмотрела работы механизма смены идентификатора процессов пользователей, а также влияние бита Sticky на запись и удаление файлов.
 
-- Полученный `pdf`-файл можно демонстрировать в любой программе просмотра `pdf`
-- Полученный `html`-файл содержит в себе все ресурсы: изображения, css, скрипты
+## Библиография
 
-# Элементы презентации
+СПИСОК ЛИТЕРАТУРЫ
 
-## Актуальность
+1.Медведовский И.Д., Семьянов П.В., Платонов В.В. Атака через Internet. — НПО "Мир и семья-95",  1997. — URL: http://bugtraq.ru/library/books/attack1/index.html
 
-- Даёт понять, о чём пойдёт речь
-- Следует широко и кратко описать проблему
-- Мотивировать свое исследование
-- Сформулировать цели и задачи
-- Возможна формулировка ожидаемых результатов
-
-## Цели и задачи
-
-- Не формулируйте более 1--2 целей исследования
-
-## Материалы и методы
-
-- Представляйте данные качественно
-- Количественно, только если крайне необходимо
-- Излишние детали не нужны
-
-## Содержание исследования
-
-- Предлагаемое решение задач исследования с обоснованием
-- Основные этапы работы
-
-## Результаты
-
-- Не нужны все результаты
-- Необходимы логические связки между слайдами
-- Необходимо показать понимание материала
+2.Теоеретические знания, приведённые в Лабораторной работе №5 - https://esystem.rudn.ru/pluginfile.php/2090129/mod_resource/content/2/005-lab_discret_sticky.pdf
 
 
-## Итоговый слайд
+СПИСОК ИНТЕРНЕТ-ИСТОЧНИКОВ
 
-- Запоминается последняя фраза. © Штирлиц
-- Главное сообщение, которое вы хотите донести до слушателей
-- Избегайте использовать последний слайд вида *Спасибо за внимание*
+1.[Электронный ресурс] - доступ: https://codeby.school/blog/informacionnaya-bezopasnost/razgranichenie-dostupa-v-linux-znakomstvo-s-astra-linux
 
-# Рекомендации
 
-## Принцип 10/20/30
+## {.standout}
 
-  - 10 слайдов
-  - 20 минут на доклад
-  - 30 кегль шрифта
-
-## Связь слайдов
-
-::: incremental
-
-- Один слайд --- одна мысль
-- Нельзя ссылаться на объекты, находящиеся на предыдущих слайдах (например, на формулы)
-- Каждый слайд должен иметь заголовок
-
-:::
-
-## Количество сущностей
-
-::: incremental
-
-- Человек может одновременно помнить $7 \pm 2$ элемента
-- При размещении информации на слайде старайтесь чтобы в сумме слайд содержал не более 5 элементов
-- Можно группировать элементы так, чтобы визуально было не более 5 групп
-
-:::
-
-## Общие рекомендации
-
-::: incremental
-
-- На слайд выносится та информация, которая без зрительной опоры воспринимается хуже
-- Слайды должны дополнять или обобщать содержание выступления или его частей, а не дублировать его
-- Информация на слайдах должна быть изложена кратко, чётко и хорошо структурирована
-- Слайд не должен быть перегружен графическими изображениями и текстом
-- Не злоупотребляйте анимацией и переходами
-
-:::
-
-## Представление данных
-
-::: incremental
-
-- Лучше представить в виде схемы
-- Менее оптимально представить в виде рисунка, графика, таблицы
-- Текст используется, если все предыдущие способы отображения информации не подошли
-
-:::
-
+Спасибо за внимание!
