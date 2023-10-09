@@ -1,210 +1,143 @@
 ---
 ## Front matter
 lang: ru-RU
-title: Структура научной презентации
-subtitle: Простейший шаблон
-author:
-  - Кулябов Д. С.
-institute:
-  - Российский университет дружбы народов, Москва, Россия
-  - Объединённый институт ядерных исследований, Дубна, Россия
-date: 01 января 1970
+title: Презентация по лабораторной работе №6
+author: Коновалова Татьяна Борисовна
+institute: РУДН, Москва, Россия
 
-## i18n babel
-babel-lang: russian
-babel-otherlangs: english
+date: 9 Октября 2023
 
-## Formatting pdf
+## Formatting
 toc: false
-toc-title: Содержание
 slide_level: 2
-aspectratio: 169
-section-titles: true
 theme: metropolis
-header-includes:
+header-includes: 
  - \metroset{progressbar=frametitle,sectionpage=progressbar,numbering=fraction}
  - '\makeatletter'
  - '\beamer@ignorenonframefalse'
  - '\makeatother'
+aspectratio: 43
+section-titles: true
+polyglossia-lang: russian
+polyglossia-otherlangs: english
+mainfont: PT Serif
+romanfont: PT Serif
+sansfont: PT Sans
+monofont: PT Mono
+mainfontoptions: Ligatures=TeX
+romanfontoptions: Ligatures=TeX
+sansfontoptions: Ligatures=TeX,Scale=MatchLowercase
+monofontoptions: Scale=MatchLowercase
+indent: true
+pdf-engine: xelatex
+header-includes:
+  - \linepenalty=10 # the penalty added to the badness of each line within a paragraph (no associated penalty node) Increasing the value makes tex try to have fewer lines in the paragraph.
+  - \interlinepenalty=0 # value of the penalty (node) added after each line of a paragraph.
+  - \hyphenpenalty=50 # the penalty for line breaking at an automatically inserted hyphen
+  - \exhyphenpenalty=50 # the penalty for line breaking at an explicit hyphen
+  - \binoppenalty=700 # the penalty for breaking a line at a binary operator
+  - \relpenalty=500 # the penalty for breaking a line at a relation
+  - \clubpenalty=150 # extra penalty for breaking after first line of a paragraph
+  - \widowpenalty=150 # extra penalty for breaking before last line of a paragraph
+  - \displaywidowpenalty=50 # extra penalty for breaking before last line before a display math
+  - \brokenpenalty=100 # extra penalty for page breaking after a hyphenated line
+  - \predisplaypenalty=10000 # penalty for breaking before a display
+  - \postdisplaypenalty=0 # penalty for breaking after a display
+  - \floatingpenalty = 20000 # penalty for splitting an insertion (can only be split footnote in standard LaTeX)
+  - \raggedbottom # or \flushbottom
+  - \usepackage{float} # keep figures where there are in the text
+  - \floatplacement{figure}{H} # keep figures where there are in the text
 ---
 
-# Информация
+# Презентация по лабораторной работы №6
 
-## Докладчик
+Мандатное разграничение прав в Linux
 
-:::::::::::::: {.columns align=center}
-::: {.column width="70%"}
+## Цель лабораторной работы
 
-  * Кулябов Дмитрий Сергеевич
-  * д.ф.-м.н., профессор
-  * профессор кафедры прикладной информатики и теории вероятностей
-  * Российский университет дружбы народов
-  * [kulyabov-ds@rudn.ru](mailto:kulyabov-ds@rudn.ru)
-  * <https://yamadharma.github.io/ru/>
+- Получить практические навыки администрирования
+- Ознакомиться с технологией SElinux
 
-:::
-::: {.column width="30%"}
+## Задачи лабораторной работы
 
-![](./image/kulyabov.jpg)
+- Найти веб-сервер Apache в списке процессов, определить его контекст безопасности и занести эту информацию в отчёт.
+- Посмотреть текущее состояние переключателей SELinux для Apache;
+- Изучить справку man httpd_selinux
 
-:::
-::::::::::::::
+# Ход лабораторной работы
 
-# Вводная часть
+## Режимы SELunix
 
-## Актуальность
+С помощью команд getenforce и sestatus убедилась, что SELinux работает в режиме enforcing политики targeted
 
-- Важно донести результаты своих исследований до окружающих
-- Научная презентация --- рабочий инструмент исследователя
-- Необходимо создавать презентацию быстро
-- Желательна минимизация усилий для создания презентации
+![getenforce и sestatus](image/1.png){ #fig:001 width=70% }
 
-## Объект и предмет исследования
+## Веб-сервер Apache
 
-- Презентация как текст
-- Программное обеспечение для создания презентаций
-- Входные и выходные форматы презентаций
+Проверила работу веб-сервера Apache командой sevrice httpd status.
 
-## Цели и задачи
+![Проверка работы сервера](image/2.png){ #fig:002 width=70% }
 
-- Создать шаблон презентации в Markdown
-- Описать алгоритм создания выходных форматов презентаций
+## Создание основного файла
 
-## Материалы и методы
+Создала файл /var/www/html/test.html от имени суперпользователя
 
-- Процессор `pandoc` для входного формата Markdown
-- Результирующие форматы
-	- `pdf`
-	- `html`
-- Автоматизация процесса создания: `Makefile`
+![Файл test.html](image/7.png){ #fig:007 width=70% }
 
-# Создание презентации
+## Просмотр файла в веб-браузере
 
-## Процессор `pandoc`
+Просморела созданный файл в веб-браузере, открыв ссылку 127.0.0.1/test.html.
 
-- Pandoc: преобразователь текстовых файлов
-- Сайт: <https://pandoc.org/>
-- Репозиторий: <https://github.com/jgm/pandoc>
+![Обращение к файлу через веб-сервер](image/8.png){ #fig:008 width=70% }
 
-## Формат `pdf`
+## Смена контекста
 
-- Использование LaTeX
-- Пакет для презентации: [beamer](https://ctan.org/pkg/beamer)
-- Тема оформления: `metropolis`
+Изменила контекст файла test.html командой chcon.
 
-## Код для формата `pdf`
+![Изменение контекста файла](image/9.png){ #fig:009 width=70% }
 
-```yaml
-slide_level: 2
-aspectratio: 169
-section-titles: true
-theme: metropolis
-```
+## Отказ в доступе
 
-## Формат `html`
+Перезагрузила страницу в веб-браузере. Теперь я получила ошибку доступа.
 
-- Используется фреймворк [reveal.js](https://revealjs.com/)
-- Используется [тема](https://revealjs.com/themes/) `beige`
+![Ошибка доступа при открытии файла через веб-сервер](image/10.png){ #fig:010 width=70% }
 
-## Код для формата `html`
+## Смена порта
 
-- Тема задаётся в файле `Makefile`
+В конфигурационном файле поменяла порт, через который происходит прослушивание. Для этого изменила строку "Listen".
 
-```make
-REVEALJS_THEME = beige 
-```
-# Результаты
+![Прослушивание 81 порта](image/12.png){ #fig:012 width=70% }
 
-## Получающиеся форматы
+## Установка порта
 
-- Полученный `pdf`-файл можно демонстрировать в любой программе просмотра `pdf`
-- Полученный `html`-файл содержит в себе все ресурсы: изображения, css, скрипты
+Установила порт и посмотрела список доступных можно с помощью команды semanage.
 
-# Элементы презентации
+![Установка порта](image/14.png){ #fig:014 width=70% }
 
-## Актуальность
+## Повторный просмотр в веб-браузере
 
-- Даёт понять, о чём пойдёт речь
-- Следует широко и кратко описать проблему
-- Мотивировать свое исследование
-- Сформулировать цели и задачи
-- Возможна формулировка ожидаемых результатов
+Просмотрела файл test.html в веб-браузере, открыв ссылку 127.0.0.1:81/test.html.
 
-## Цели и задачи
+![Повторный просмотр файла в веб-браузере](image/16.png){ #fig:016 width=70% }
 
-- Не формулируйте более 1--2 целей исследования
+## Выводы
 
-## Материалы и методы
+Получила практические навыки адмирирования в OC Linux и ознакомилась с технологией SELinux совместно с веб-сервером Apache.
 
-- Представляйте данные качественно
-- Количественно, только если крайне необходимо
-- Излишние детали не нужны
+## Библиография
 
-## Содержание исследования
+СПИСОК ЛИТЕРАТУРЫ
 
-- Предлагаемое решение задач исследования с обоснованием
-- Основные этапы работы
+1.Медведовский И.Д., Семьянов П.В., Платонов В.В. Атака через Internet. — НПО "Мир и семья-95",  1997. — URL: http://bugtraq.ru/library/books/attack1/index.html
 
-## Результаты
-
-- Не нужны все результаты
-- Необходимы логические связки между слайдами
-- Необходимо показать понимание материала
+2.Теоеретические знания, приведённые в Лабораторной работе №6 - https://esystem.rudn.ru/pluginfile.php/2090131/mod_resource/content/2/006-lab_selinux.pdf
 
 
-## Итоговый слайд
+СПИСОК ИНТЕРНЕТ-ИСТОЧНИКОВ
 
-- Запоминается последняя фраза. © Штирлиц
-- Главное сообщение, которое вы хотите донести до слушателей
-- Избегайте использовать последний слайд вида *Спасибо за внимание*
+1.[Электронный ресурс] - доступ: https://codeby.school/blog/informacionnaya-bezopasnost/razgranichenie-dostupa-v-linux-znakomstvo-s-astra-linux
 
-# Рекомендации
 
-## Принцип 10/20/30
+## {.standout}
 
-  - 10 слайдов
-  - 20 минут на доклад
-  - 30 кегль шрифта
-
-## Связь слайдов
-
-::: incremental
-
-- Один слайд --- одна мысль
-- Нельзя ссылаться на объекты, находящиеся на предыдущих слайдах (например, на формулы)
-- Каждый слайд должен иметь заголовок
-
-:::
-
-## Количество сущностей
-
-::: incremental
-
-- Человек может одновременно помнить $7 \pm 2$ элемента
-- При размещении информации на слайде старайтесь чтобы в сумме слайд содержал не более 5 элементов
-- Можно группировать элементы так, чтобы визуально было не более 5 групп
-
-:::
-
-## Общие рекомендации
-
-::: incremental
-
-- На слайд выносится та информация, которая без зрительной опоры воспринимается хуже
-- Слайды должны дополнять или обобщать содержание выступления или его частей, а не дублировать его
-- Информация на слайдах должна быть изложена кратко, чётко и хорошо структурирована
-- Слайд не должен быть перегружен графическими изображениями и текстом
-- Не злоупотребляйте анимацией и переходами
-
-:::
-
-## Представление данных
-
-::: incremental
-
-- Лучше представить в виде схемы
-- Менее оптимально представить в виде рисунка, графика, таблицы
-- Текст используется, если все предыдущие способы отображения информации не подошли
-
-:::
-
+Спасибо за внимание!
