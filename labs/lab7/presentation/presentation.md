@@ -1,210 +1,111 @@
 ---
 ## Front matter
 lang: ru-RU
-title: Структура научной презентации
-subtitle: Простейший шаблон
-author:
-  - Кулябов Д. С.
-institute:
-  - Российский университет дружбы народов, Москва, Россия
-  - Объединённый институт ядерных исследований, Дубна, Россия
-date: 01 января 1970
+title: Презентация по лабораторной работе №7
+author: Коновалова Татьяна Борисовна
+institute: РУДН, Москва, Россия
 
-## i18n babel
-babel-lang: russian
-babel-otherlangs: english
+date: 16 Октября 2023
 
-## Formatting pdf
+## Formatting
 toc: false
-toc-title: Содержание
 slide_level: 2
-aspectratio: 169
-section-titles: true
 theme: metropolis
-header-includes:
+header-includes: 
  - \metroset{progressbar=frametitle,sectionpage=progressbar,numbering=fraction}
  - '\makeatletter'
  - '\beamer@ignorenonframefalse'
  - '\makeatother'
+aspectratio: 43
+section-titles: true
+polyglossia-lang: russian
+polyglossia-otherlangs: english
+mainfont: PT Serif
+romanfont: PT Serif
+sansfont: PT Sans
+monofont: PT Mono
+mainfontoptions: Ligatures=TeX
+romanfontoptions: Ligatures=TeX
+sansfontoptions: Ligatures=TeX,Scale=MatchLowercase
+monofontoptions: Scale=MatchLowercase
+indent: true
+pdf-engine: xelatex
+header-includes:
+  - \linepenalty=10 # the penalty added to the badness of each line within a paragraph (no associated penalty node) Increasing the value makes tex try to have fewer lines in the paragraph.
+  - \interlinepenalty=0 # value of the penalty (node) added after each line of a paragraph.
+  - \hyphenpenalty=50 # the penalty for line breaking at an automatically inserted hyphen
+  - \exhyphenpenalty=50 # the penalty for line breaking at an explicit hyphen
+  - \binoppenalty=700 # the penalty for breaking a line at a binary operator
+  - \relpenalty=500 # the penalty for breaking a line at a relation
+  - \clubpenalty=150 # extra penalty for breaking after first line of a paragraph
+  - \widowpenalty=150 # extra penalty for breaking before last line of a paragraph
+  - \displaywidowpenalty=50 # extra penalty for breaking before last line before a display math
+  - \brokenpenalty=100 # extra penalty for page breaking after a hyphenated line
+  - \predisplaypenalty=10000 # penalty for breaking before a display
+  - \postdisplaypenalty=0 # penalty for breaking after a display
+  - \floatingpenalty = 20000 # penalty for splitting an insertion (can only be split footnote in standard LaTeX)
+  - \raggedbottom # or \flushbottom
+  - \usepackage{float} # keep figures where there are in the text
+  - \floatplacement{figure}{H} # keep figures where there are in the text
 ---
 
-# Информация
+# Элементы криптографии. Однократное гаммирование
 
-## Докладчик
+## Цель лабораторной работы №7
 
-:::::::::::::: {.columns align=center}
-::: {.column width="70%"}
+Цель лабораторной работы --- Освоить основы шифрования через однократное гаммирование.
 
-  * Кулябов Дмитрий Сергеевич
-  * д.ф.-м.н., профессор
-  * профессор кафедры прикладной информатики и теории вероятностей
-  * Российский университет дружбы народов
-  * [kulyabov-ds@rudn.ru](mailto:kulyabov-ds@rudn.ru)
-  * <https://yamadharma.github.io/ru/>
+## Задачи лабораторной работы №7
 
-:::
-::: {.column width="30%"}
+1.Подобрать ключ, чтобы получить сообщение «С Новым Годом, друзья!»;
+2.Разработать приложение, позволяющее шифровать и дешифровать данные в режиме однократного гаммирования.
 
-![](./image/kulyabov.jpg)
+# Ход лабораторной работы №7
 
-:::
-::::::::::::::
+## Теоретическое введение
 
-# Вводная часть
+Гаммирование представляет собой наложение (снятие) на открытые (зашифрованные) данные последовательности элементов других данных, полученной с помощью некоторого криптографического алгоритма, для получения зашифрованных (открытых) данных. Иными словами, наложение
+гаммы — это сложение её элементов с элементами открытого (закрытого)
+текста по некоторому фиксированному модулю, значение которого представляет собой известную часть алгоритма шифрования.
 
-## Актуальность
+## Функция шифрования
 
-- Важно донести результаты своих исследований до окружающих
-- Научная презентация --- рабочий инструмент исследователя
-- Необходимо создавать презентацию быстро
-- Желательна минимизация усилий для создания презентации
+Создала функцию, которая осуществляет однократное гаммирование посредством побитового XOR
 
-## Объект и предмет исследования
+![Функция шифрования](image/1.png){ #fig:001 width=70% }
 
-- Презентация как текст
-- Программное обеспечение для создания презентаций
-- Входные и выходные форматы презентаций
+## Исходные данные
 
-## Цели и задачи
+Задала текстовую строку и случайный символьный ключ такой же длины 
 
-- Создать шаблон презентации в Markdown
-- Описать алгоритм создания выходных форматов презентаций
+![Исходные данные](image/3.png){ #fig:003 width=70% }
 
-## Материалы и методы
+## Результат работы программы
 
-- Процессор `pandoc` для входного формата Markdown
-- Результирующие форматы
-	- `pdf`
-	- `html`
-- Автоматизация процесса создания: `Makefile`
+Запустила функцию. В первом случае получила зашифрованный текст. 
+После этого, используя тот же самый ключ, осуществила дешифровку текста.
+Так же, зная оригинальный текст и его шифорку, с помощью кода могу получить ключ.
 
-# Создание презентации
+![Результат работы программы](image/4.png){ #fig:004 width=70% }
 
-## Процессор `pandoc`
+## Выводы
 
-- Pandoc: преобразователь текстовых файлов
-- Сайт: <https://pandoc.org/>
-- Репозиторий: <https://github.com/jgm/pandoc>
+Освоила основы шифрования через однократное гаммирование
 
-## Формат `pdf`
+## Библиография
 
-- Использование LaTeX
-- Пакет для презентации: [beamer](https://ctan.org/pkg/beamer)
-- Тема оформления: `metropolis`
+СПИСОК ЛИТЕРАТУРЫ
 
-## Код для формата `pdf`
+1.Медведовский И.Д., Семьянов П.В., Платонов В.В. Атака через Internet. — НПО "Мир и семья-95",  1997. — URL: http://bugtraq.ru/library/books/attack1/index.html
 
-```yaml
-slide_level: 2
-aspectratio: 169
-section-titles: true
-theme: metropolis
-```
-
-## Формат `html`
-
-- Используется фреймворк [reveal.js](https://revealjs.com/)
-- Используется [тема](https://revealjs.com/themes/) `beige`
-
-## Код для формата `html`
-
-- Тема задаётся в файле `Makefile`
-
-```make
-REVEALJS_THEME = beige 
-```
-# Результаты
-
-## Получающиеся форматы
-
-- Полученный `pdf`-файл можно демонстрировать в любой программе просмотра `pdf`
-- Полученный `html`-файл содержит в себе все ресурсы: изображения, css, скрипты
-
-# Элементы презентации
-
-## Актуальность
-
-- Даёт понять, о чём пойдёт речь
-- Следует широко и кратко описать проблему
-- Мотивировать свое исследование
-- Сформулировать цели и задачи
-- Возможна формулировка ожидаемых результатов
-
-## Цели и задачи
-
-- Не формулируйте более 1--2 целей исследования
-
-## Материалы и методы
-
-- Представляйте данные качественно
-- Количественно, только если крайне необходимо
-- Излишние детали не нужны
-
-## Содержание исследования
-
-- Предлагаемое решение задач исследования с обоснованием
-- Основные этапы работы
-
-## Результаты
-
-- Не нужны все результаты
-- Необходимы логические связки между слайдами
-- Необходимо показать понимание материала
+2.Теоретические знания, приведённые в Лабораторной работе №7 - https://esystem.rudn.ru/pluginfile.php/2090133/mod_resource/content/2/007-lab_crypto-gamma.pdf
 
 
-## Итоговый слайд
+СПИСОК ИНТЕРНЕТ-ИСТОЧНИКОВ
 
-- Запоминается последняя фраза. © Штирлиц
-- Главное сообщение, которое вы хотите донести до слушателей
-- Избегайте использовать последний слайд вида *Спасибо за внимание*
+1.[Электронный ресурс] - доступ: https://codeby.school/blog/informacionnaya-bezopasnost/razgranichenie-dostupa-v-linux-znakomstvo-s-astra-linux
 
-# Рекомендации
 
-## Принцип 10/20/30
+## {.standout}
 
-  - 10 слайдов
-  - 20 минут на доклад
-  - 30 кегль шрифта
-
-## Связь слайдов
-
-::: incremental
-
-- Один слайд --- одна мысль
-- Нельзя ссылаться на объекты, находящиеся на предыдущих слайдах (например, на формулы)
-- Каждый слайд должен иметь заголовок
-
-:::
-
-## Количество сущностей
-
-::: incremental
-
-- Человек может одновременно помнить $7 \pm 2$ элемента
-- При размещении информации на слайде старайтесь чтобы в сумме слайд содержал не более 5 элементов
-- Можно группировать элементы так, чтобы визуально было не более 5 групп
-
-:::
-
-## Общие рекомендации
-
-::: incremental
-
-- На слайд выносится та информация, которая без зрительной опоры воспринимается хуже
-- Слайды должны дополнять или обобщать содержание выступления или его частей, а не дублировать его
-- Информация на слайдах должна быть изложена кратко, чётко и хорошо структурирована
-- Слайд не должен быть перегружен графическими изображениями и текстом
-- Не злоупотребляйте анимацией и переходами
-
-:::
-
-## Представление данных
-
-::: incremental
-
-- Лучше представить в виде схемы
-- Менее оптимально представить в виде рисунка, графика, таблицы
-- Текст используется, если все предыдущие способы отображения информации не подошли
-
-:::
-
+Спасибо за внимание!
